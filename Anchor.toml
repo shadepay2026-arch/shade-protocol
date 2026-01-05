@@ -5,13 +5,13 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-shade = "XEyyUoXxLN3DE9ezqwUvPp8FZehunWxmkcsWyoi8vzG"
+shade = "3ucYdoYVtvq5dNHqCYWL1WR8kgN4dgDrKnxRK7SN65oN"
 
 [programs.devnet]
-shade = "XEyyUoXxLN3DE9ezqwUvPp8FZehunWxmkcsWyoi8vzG"
+shade = "3ucYdoYVtvq5dNHqCYWL1WR8kgN4dgDrKnxRK7SN65oN"
 
 [programs.mainnet]
-shade = "XEyyUoXxLN3DE9ezqwUvPp8FZehunWxmkcsWyoi8vzG"
+shade = "3ucYdoYVtvq5dNHqCYWL1WR8kgN4dgDrKnxRK7SN65oN"
 
 [registry]
 url = "https://api.apr.dev"
@@ -21,4 +21,4 @@ cluster = "Devnet"
 wallet = "D:/Dev/Keys/shade-deployer.json"
 
 [scripts]
-test = "npx ts-mocha -p ./tsconfig.json -t 1000000 tests/comprehensive-test.ts"
+test = "npx ts-mocha -p ./tsconfig.json -t 1000000 tests/v2-test.ts"
