@@ -73,6 +73,31 @@ pub mod shade {
         Ok(())
     }
 
+    /// Update tier thresholds (admin only)
+    pub fn update_tiers(
+        ctx: Context<UpdateProtocol>,
+        bronze_threshold: u64,
+        silver_threshold: u64,
+        gold_threshold: u64,
+    ) -> Result<()> {
+        // Validate thresholds are in ascending order
+        require!(bronze_threshold < silver_threshold, ShadeError::InvalidTierThresholds);
+        require!(silver_threshold < gold_threshold, ShadeError::InvalidTierThresholds);
+
+        let config = &mut ctx.accounts.protocol_config;
+        config.bronze_threshold = bronze_threshold;
+        config.silver_threshold = silver_threshold;
+        config.gold_threshold = gold_threshold;
+
+        emit!(TiersUpdated {
+            bronze: bronze_threshold,
+            silver: silver_threshold,
+            gold: gold_threshold,
+        });
+
+        Ok(())
+    }
+
     // ========================================================================
     // STAKING
     // ========================================================================
@@ -1023,6 +1048,13 @@ pub struct FeeUpdated {
 }
 
 #[event]
+pub struct TiersUpdated {
+    pub bronze: u64,
+    pub silver: u64,
+    pub gold: u64,
+}
+
+#[event]
 pub struct Staked {
     pub user: Pubkey,
     pub amount: u64,
@@ -1128,4 +1160,6 @@ pub enum ShadeError {
     NotStaking,
     #[msg("Spending cap exceeds tier limit")]
     ExceedsTierLimit,
+    #[msg("Invalid tier thresholds (must be ascending)")]
+    InvalidTierThresholds,
 }

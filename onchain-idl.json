@@ -1,0 +1,1826 @@
+﻿{
+  "accounts": [
+    {
+      "discriminator": [
+        3,
+        68,
+        168,
+        243,
+        195,
+        168,
+        32,
+        75
+      ],
+      "name": "Authorization"
+    },
+    {
+      "discriminator": [
+        119,
+        33,
+        105,
+        252,
+        216,
+        75,
+        239,
+        82
+      ],
+      "name": "FogPool"
+    },
+    {
+      "discriminator": [
+        207,
+        91,
+        250,
+        28,
+        152,
+        179,
+        215,
+        209
+      ],
+      "name": "ProtocolConfig"
+    },
+    {
+      "discriminator": [
+        171,
+        229,
+        193,
+        85,
+        67,
+        177,
+        151,
+        4
+      ],
+      "name": "Staker"
+    }
+  ],
+  "address": "3ucYdoYVtvq5dNHqCYWL1WR8kgN4dgDrKnxRK7SN65oN",
+  "docs": [
+    "SHADE Protocol: Authorization-Based Finance",
+    "Spend without owning - cryptographic permission to spend from shared liquidity",
+    "",
+    "Features:",
+    "- Fog Pools: Shared liquidity reservoirs",
+    "- Authorizations: Cryptographic spending permissions",
+    "- Staking: Stake $SHADE to unlock tiers and earn fees",
+    "- Fee Sharing: Protocol fees distributed to stakers"
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "msg": "Invalid amount specified",
+      "name": "InvalidAmount"
+    },
+    {
+      "code": 6001,
+      "msg": "Purpose string too long (max 64 characters)",
+      "name": "PurposeTooLong"
+    },
+    {
+      "code": 6002,
+      "msg": "Invalid expiry timestamp",
+      "name": "InvalidExpiry"
+    },
+    {
+      "code": 6003,
+      "msg": "Authorization is not active",
+      "name": "AuthorizationInactive"
+    },
+    {
+      "code": 6004,
+      "msg": "Authorization has expired",
+      "name": "AuthorizationExpired"
+    },
+    {
+      "code": 6005,
+      "msg": "Amount exceeds spending cap",
+      "name": "ExceedsSpendingCap"
+    },
+    {
+      "code": 6006,
+      "msg": "Arithmetic overflow",
+      "name": "Overflow"
+    },
+    {
+      "code": 6007,
+      "msg": "Unauthorized action",
+      "name": "Unauthorized"
+    },
+    {
+      "code": 6008,
+      "msg": "Fee too high (max 10%)",
+      "name": "FeeTooHigh"
+    },
+    {
+      "code": 6009,
+      "msg": "Insufficient staked amount",
+      "name": "InsufficientStake"
+    },
+    {
+      "code": 6010,
+      "msg": "No rewards to claim",
+      "name": "NoRewardsToClaim"
+    },
+    {
+      "code": 6011,
+      "msg": "No stakers in the protocol",
+      "name": "NoStakers"
+    },
+    {
+      "code": 6012,
+      "msg": "User is not staking",
+      "name": "NotStaking"
+    },
+    {
+      "code": 6013,
+      "msg": "Spending cap exceeds tier limit",
+      "name": "ExceedsTierLimit"
+    },
+    {
+      "code": 6014,
+      "msg": "Invalid tier thresholds (must be ascending)",
+      "name": "InvalidTierThresholds"
+    }
+  ],
+  "events": [
+    {
+      "discriminator": [
+        93,
+        74,
+        226,
+        175,
+        139,
+        126,
+        224,
+        218
+      ],
+      "name": "AuthorizationCreated"
+    },
+    {
+      "discriminator": [
+        138,
+        205,
+        239,
+        115,
+        117,
+        72,
+        242,
+        86
+      ],
+      "name": "AuthorizationRevoked"
+    },
+    {
+      "discriminator": [
+        210,
+        201,
+        130,
+        183,
+        244,
+        203,
+        155,
+        199
+      ],
+      "name": "DepositMade"
+    },
+    {
+      "discriminator": [
+        228,
+        75,
+        43,
+        103,
+        9,
+        196,
+        182,
+        4
+      ],
+      "name": "FeeUpdated"
+    },
+    {
+      "discriminator": [
+        209,
+        24,
+        174,
+        200,
+        236,
+        90,
+        154,
+        55
+      ],
+      "name": "FeesDistributed"
+    },
+    {
+      "discriminator": [
+        156,
+        185,
+        53,
+        242,
+        188,
+        237,
+        179,
+        244
+      ],
+      "name": "FogPoolCreated"
+    },
+    {
+      "discriminator": [
+        173,
+        122,
+        168,
+        254,
+        9,
+        118,
+        76,
+        132
+      ],
+      "name": "ProtocolInitialized"
+    },
+    {
+      "discriminator": [
+        75,
+        98,
+        88,
+        18,
+        219,
+        112,
+        88,
+        121
+      ],
+      "name": "RewardsClaimed"
+    },
+    {
+      "discriminator": [
+        27,
+        251,
+        149,
+        186,
+        175,
+        148,
+        73,
+        5
+      ],
+      "name": "SpendExecuted"
+    },
+    {
+      "discriminator": [
+        11,
+        146,
+        45,
+        205,
+        230,
+        58,
+        213,
+        240
+      ],
+      "name": "Staked"
+    },
+    {
+      "discriminator": [
+        149,
+        194,
+        233,
+        237,
+        201,
+        23,
+        37,
+        225
+      ],
+      "name": "TiersUpdated"
+    },
+    {
+      "discriminator": [
+        27,
+        179,
+        156,
+        215,
+        47,
+        71,
+        195,
+        7
+      ],
+      "name": "Unstaked"
+    }
+  ],
+  "instructions": [
+    {
+      "accounts": [
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "staker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "fee_vault",
+          "writable": true
+        },
+        {
+          "name": "user_token_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "signer": true
+        },
+        {
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "name": "token_program"
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        4,
+        144,
+        132,
+        71,
+        116,
+        23,
+        151,
+        80
+      ],
+      "docs": [
+        "Claim accumulated fee rewards"
+      ],
+      "name": "claim_rewards"
+    },
+    {
+      "accounts": [
+        {
+          "name": "authorization",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  122,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "fog_pool"
+              },
+              {
+                "kind": "account",
+                "path": "spender"
+              },
+              {
+                "kind": "arg",
+                "path": "nonce"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "fog_pool",
+          "writable": true
+        },
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "docs": [
+            "Optional staker account for tier validation"
+          ],
+          "name": "staker",
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "spender"
+              }
+            ]
+          }
+        },
+        {
+          "name": "spender"
+        },
+        {
+          "name": "issuer",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "nonce",
+          "type": "u64"
+        },
+        {
+          "name": "spending_cap",
+          "type": "u64"
+        },
+        {
+          "name": "expires_at",
+          "type": "i64"
+        },
+        {
+          "name": "purpose",
+          "type": "string"
+        }
+      ],
+      "discriminator": [
+        82,
+        105,
+        2,
+        148,
+        133,
+        5,
+        239,
+        196
+      ],
+      "docs": [
+        "Create a spending authorization - permission to spend from the fog",
+        "The spending cap is validated against the spender's staking tier"
+      ],
+      "name": "create_authorization"
+    },
+    {
+      "accounts": [
+        {
+          "name": "fog_pool",
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "depositor_token_account",
+          "writable": true
+        },
+        {
+          "name": "depositor",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        218,
+        108,
+        69,
+        97,
+        165,
+        209,
+        40,
+        2
+      ],
+      "docs": [
+        "Deposit funds into the Fog Pool (LP deposit)"
+      ],
+      "name": "deposit_to_fog"
+    },
+    {
+      "accounts": [
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "staker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              },
+              {
+                "account": "Staker",
+                "kind": "account",
+                "path": "staker.user"
+              }
+            ]
+          },
+          "writable": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        120,
+        56,
+        27,
+        7,
+        53,
+        176,
+        113,
+        186
+      ],
+      "docs": [
+        "Distribute fees to a staker (called by anyone, incentivized)"
+      ],
+      "name": "distribute_fees"
+    },
+    {
+      "accounts": [
+        {
+          "name": "fog_pool",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  102,
+                  111,
+                  103,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "pool_seed"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        },
+        {
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "pool_seed",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ],
+      "discriminator": [
+        154,
+        155,
+        173,
+        138,
+        254,
+        48,
+        59,
+        226
+      ],
+      "docs": [
+        "Initialize a new Fog Pool - shared liquidity reservoir"
+      ],
+      "name": "initialize_fog_pool"
+    },
+    {
+      "accounts": [
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "docs": [
+            "The $SHADE token mint"
+          ],
+          "name": "shade_mint"
+        },
+        {
+          "docs": [
+            "Fee vault (token account for collected fees)"
+          ],
+          "name": "fee_vault",
+          "writable": true
+        },
+        {
+          "docs": [
+            "Staking vault (token account for staked $SHADE)"
+          ],
+          "name": "staking_vault",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        },
+        {
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "fee_basis_points",
+          "type": "u16"
+        }
+      ],
+      "discriminator": [
+        188,
+        233,
+        252,
+        106,
+        134,
+        146,
+        202,
+        91
+      ],
+      "docs": [
+        "Initialize the protocol configuration (one-time setup)"
+      ],
+      "name": "initialize_protocol"
+    },
+    {
+      "accounts": [
+        {
+          "name": "authorization",
+          "writable": true
+        },
+        {
+          "name": "fog_pool",
+          "writable": true
+        },
+        {
+          "name": "issuer",
+          "signer": true
+        }
+      ],
+      "args": [],
+      "discriminator": [
+        222,
+        179,
+        207,
+        59,
+        191,
+        78,
+        24,
+        248
+      ],
+      "docs": [
+        "Revoke an authorization"
+      ],
+      "name": "revoke_authorization"
+    },
+    {
+      "accounts": [
+        {
+          "name": "authorization",
+          "writable": true
+        },
+        {
+          "name": "fog_pool",
+          "writable": true
+        },
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "vault",
+          "writable": true
+        },
+        {
+          "name": "fee_vault",
+          "writable": true
+        },
+        {
+          "name": "recipient_token_account",
+          "writable": true
+        },
+        {
+          "name": "spender",
+          "signer": true
+        },
+        {
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        242,
+        205,
+        255,
+        87,
+        101,
+        217,
+        245,
+        57
+      ],
+      "docs": [
+        "Spend using an authorization - the core of SHADE",
+        "Takes a protocol fee that goes to stakers"
+      ],
+      "name": "spend"
+    },
+    {
+      "accounts": [
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "staker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "staking_vault",
+          "writable": true
+        },
+        {
+          "name": "user_shade_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "signer": true,
+          "writable": true
+        },
+        {
+          "address": "11111111111111111111111111111111",
+          "name": "system_program"
+        },
+        {
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        206,
+        176,
+        202,
+        18,
+        200,
+        209,
+        179,
+        108
+      ],
+      "docs": [
+        "Stake $SHADE tokens to earn fees and unlock higher tiers"
+      ],
+      "name": "stake"
+    },
+    {
+      "accounts": [
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "staker",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "user"
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "staking_vault",
+          "writable": true
+        },
+        {
+          "name": "user_shade_account",
+          "writable": true
+        },
+        {
+          "name": "user",
+          "signer": true
+        },
+        {
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+          "name": "token_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        90,
+        95,
+        107,
+        42,
+        205,
+        124,
+        50,
+        225
+      ],
+      "docs": [
+        "Unstake $SHADE tokens"
+      ],
+      "name": "unstake"
+    },
+    {
+      "accounts": [
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_fee_basis_points",
+          "type": "u16"
+        }
+      ],
+      "discriminator": [
+        232,
+        253,
+        195,
+        247,
+        148,
+        212,
+        73,
+        222
+      ],
+      "docs": [
+        "Update protocol fee (admin only)"
+      ],
+      "name": "update_fee"
+    },
+    {
+      "accounts": [
+        {
+          "name": "protocol_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  116,
+                  111,
+                  99,
+                  111,
+                  108,
+                  95,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          },
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "bronze_threshold",
+          "type": "u64"
+        },
+        {
+          "name": "silver_threshold",
+          "type": "u64"
+        },
+        {
+          "name": "gold_threshold",
+          "type": "u64"
+        }
+      ],
+      "discriminator": [
+        165,
+        231,
+        46,
+        8,
+        16,
+        111,
+        129,
+        212
+      ],
+      "docs": [
+        "Update tier thresholds (admin only)"
+      ],
+      "name": "update_tiers"
+    }
+  ],
+  "metadata": {
+    "description": "SHADE Protocol - Authorization-Based Finance on Solana",
+    "name": "shade",
+    "spec": "0.1.0",
+    "version": "0.1.0"
+  },
+  "types": [
+    {
+      "docs": [
+        "Authorization - Cryptographic permission to spend from the fog"
+      ],
+      "name": "Authorization",
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "The fog pool this authorization draws from"
+            ],
+            "name": "fog_pool",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Who can use this authorization to spend"
+            ],
+            "name": "authorized_spender",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Who issued this authorization"
+            ],
+            "name": "issuer",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Maximum amount that can be spent"
+            ],
+            "name": "spending_cap",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Amount already spent"
+            ],
+            "name": "amount_spent",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "When the authorization was created"
+            ],
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "docs": [
+              "When the authorization expires"
+            ],
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "docs": [
+              "Purpose description (max 64 chars)"
+            ],
+            "name": "purpose",
+            "type": "string"
+          },
+          {
+            "docs": [
+              "Whether the authorization is still valid"
+            ],
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "docs": [
+              "PDA bump seed"
+            ],
+            "name": "bump",
+            "type": "u8"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "AuthorizationCreated",
+      "type": {
+        "fields": [
+          {
+            "name": "authorization",
+            "type": "pubkey"
+          },
+          {
+            "name": "fog_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "spender",
+            "type": "pubkey"
+          },
+          {
+            "name": "issuer",
+            "type": "pubkey"
+          },
+          {
+            "name": "spending_cap",
+            "type": "u64"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "purpose",
+            "type": "string"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "AuthorizationRevoked",
+      "type": {
+        "fields": [
+          {
+            "name": "authorization",
+            "type": "pubkey"
+          },
+          {
+            "name": "fog_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "revoked_by",
+            "type": "pubkey"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "DepositMade",
+      "type": {
+        "fields": [
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "depositor",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "FeeUpdated",
+      "type": {
+        "fields": [
+          {
+            "name": "old_fee",
+            "type": "u16"
+          },
+          {
+            "name": "new_fee",
+            "type": "u16"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "FeesDistributed",
+      "type": {
+        "fields": [
+          {
+            "name": "staker",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "Fog Pool - Shared liquidity reservoir where ownership is non-attributable"
+      ],
+      "name": "FogPool",
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "Authority who controls the fog pool"
+            ],
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Token vault holding the pooled funds"
+            ],
+            "name": "vault",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Total tokens deposited into the pool"
+            ],
+            "name": "total_deposited",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Total tokens spent from the pool"
+            ],
+            "name": "total_spent",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Total fees generated from this pool"
+            ],
+            "name": "total_fees_generated",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Number of active authorizations"
+            ],
+            "name": "active_authorizations",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Unique seed for PDA derivation"
+            ],
+            "name": "pool_seed",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "docs": [
+              "PDA bump seed"
+            ],
+            "name": "bump",
+            "type": "u8"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "FogPoolCreated",
+      "type": {
+        "fields": [
+          {
+            "name": "pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "vault",
+            "type": "pubkey"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "Protocol configuration - global settings"
+      ],
+      "name": "ProtocolConfig",
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "Protocol admin"
+            ],
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "$SHADE token mint"
+            ],
+            "name": "shade_mint",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Fee vault for collected fees"
+            ],
+            "name": "fee_vault",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Staking vault for staked $SHADE"
+            ],
+            "name": "staking_vault",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Fee in basis points (e.g., 10 = 0.1%)"
+            ],
+            "name": "fee_basis_points",
+            "type": "u16"
+          },
+          {
+            "docs": [
+              "Total $SHADE staked"
+            ],
+            "name": "total_staked",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Total fees collected"
+            ],
+            "name": "total_fees_collected",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Total fees distributed to stakers"
+            ],
+            "name": "total_fees_distributed",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Bronze tier threshold"
+            ],
+            "name": "bronze_threshold",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Silver tier threshold"
+            ],
+            "name": "silver_threshold",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Gold tier threshold"
+            ],
+            "name": "gold_threshold",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Bronze tier cap multiplier (basis points)"
+            ],
+            "name": "bronze_cap_multiplier",
+            "type": "u16"
+          },
+          {
+            "docs": [
+              "Silver tier cap multiplier (basis points)"
+            ],
+            "name": "silver_cap_multiplier",
+            "type": "u16"
+          },
+          {
+            "docs": [
+              "Gold tier cap multiplier (basis points)"
+            ],
+            "name": "gold_cap_multiplier",
+            "type": "u16"
+          },
+          {
+            "docs": [
+              "PDA bump"
+            ],
+            "name": "bump",
+            "type": "u8"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "ProtocolInitialized",
+      "type": {
+        "fields": [
+          {
+            "name": "config",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "fee_basis_points",
+            "type": "u16"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "RewardsClaimed",
+      "type": {
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "SpendExecuted",
+      "type": {
+        "fields": [
+          {
+            "name": "authorization",
+            "type": "pubkey"
+          },
+          {
+            "name": "fog_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "spender",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "fee",
+            "type": "u64"
+          },
+          {
+            "name": "net_amount",
+            "type": "u64"
+          },
+          {
+            "name": "remaining",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "Staked",
+      "type": {
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "new_total",
+            "type": "u64"
+          },
+          {
+            "name": "tier",
+            "type": "u8"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "docs": [
+        "Staker account - tracks user's staking info"
+      ],
+      "name": "Staker",
+      "type": {
+        "fields": [
+          {
+            "docs": [
+              "User's wallet"
+            ],
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "docs": [
+              "Amount of $SHADE staked"
+            ],
+            "name": "staked_amount",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Pending rewards to claim"
+            ],
+            "name": "pending_rewards",
+            "type": "u64"
+          },
+          {
+            "docs": [
+              "Last reward claim timestamp"
+            ],
+            "name": "last_claim_timestamp",
+            "type": "i64"
+          },
+          {
+            "docs": [
+              "Current tier (0=None, 1=Bronze, 2=Silver, 3=Gold)"
+            ],
+            "name": "tier",
+            "type": "u8"
+          },
+          {
+            "docs": [
+              "PDA bump"
+            ],
+            "name": "bump",
+            "type": "u8"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "TiersUpdated",
+      "type": {
+        "fields": [
+          {
+            "name": "bronze",
+            "type": "u64"
+          },
+          {
+            "name": "silver",
+            "type": "u64"
+          },
+          {
+            "name": "gold",
+            "type": "u64"
+          }
+        ],
+        "kind": "struct"
+      }
+    },
+    {
+      "name": "Unstaked",
+      "type": {
+        "fields": [
+          {
+            "name": "user",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "remaining",
+            "type": "u64"
+          },
+          {
+            "name": "tier",
+            "type": "u8"
+          }
+        ],
+        "kind": "struct"
+      }
+    }
+  ]
+}
