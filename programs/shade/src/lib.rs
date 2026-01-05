@@ -38,9 +38,10 @@ pub mod shade {
         config.bump = ctx.bumps.protocol_config;
 
         // Tier thresholds (in $SHADE tokens with 6 decimals)
-        config.bronze_threshold = 100_000_000;      // 100 $SHADE
-        config.silver_threshold = 1_000_000_000;    // 1,000 $SHADE
-        config.gold_threshold = 10_000_000_000;     // 10,000 $SHADE
+        // Adjusted for pump.fun launch
+        config.bronze_threshold = 10_000_000_000;      // 10,000 $SHADE
+        config.silver_threshold = 100_000_000_000;     // 100,000 $SHADE
+        config.gold_threshold = 500_000_000_000;       // 500,000 $SHADE
 
         // Spending cap multipliers per tier (in basis points of base cap)
         config.bronze_cap_multiplier = 100;  // 1x base
