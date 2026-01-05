@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
-declare_id!("DTW1EWDEsqTi4XvWSRkad138eHQcQxVs7mV9YXivcaox");
+declare_id!("FgQsc4FZUvZFvBWiNstP9Rf5vRjGX7pcr9gB89QZq3hj");
 
 /// SHADE Protocol: Authorization-Based Finance
 /// Spend without owning - cryptographic permission to spend from shared liquidity
@@ -122,11 +122,34 @@ pub mod shade {
         let config = &ctx.accounts.protocol_config;
         
         if staker.user == Pubkey::default() {
+            // New staker - initialize
             staker.user = ctx.accounts.user.key();
             staker.staked_amount = 0;
             staker.pending_rewards = 0;
             staker.last_claim_timestamp = Clock::get()?.unix_timestamp;
+            // Initialize snapshot to current fees so new stakers don't claim old fees
+            staker.last_fees_snapshot = config.total_fees_collected;
             staker.bump = ctx.bumps.staker;
+        } else if staker.staked_amount > 0 && config.total_staked > 0 {
+            // Existing staker adding more - auto-distribute pending rewards first
+            // This prevents gaming by staking more right before distribution
+            let new_fees = config.total_fees_collected
+                .saturating_sub(staker.last_fees_snapshot);
+            
+            if new_fees > 0 {
+                let share = (new_fees as u128)
+                    .checked_mul(staker.staked_amount as u128)
+                    .ok_or(ShadeError::Overflow)?
+                    .checked_div(config.total_staked as u128)
+                    .ok_or(ShadeError::Overflow)? as u64;
+                
+                if share > 0 {
+                    staker.pending_rewards = staker.pending_rewards
+                        .checked_add(share)
+                        .ok_or(ShadeError::Overflow)?;
+                }
+            }
+            staker.last_fees_snapshot = config.total_fees_collected;
         }
 
         staker.staked_amount = staker
@@ -159,6 +182,31 @@ pub mod shade {
         let staker = &ctx.accounts.staker;
         require!(amount > 0, ShadeError::InvalidAmount);
         require!(staker.staked_amount >= amount, ShadeError::InsufficientStake);
+
+        let config = &ctx.accounts.protocol_config;
+
+        // Auto-distribute pending rewards before reducing stake
+        // This ensures fair distribution based on stake at time fees were earned
+        let staker = &mut ctx.accounts.staker;
+        if staker.staked_amount > 0 && config.total_staked > 0 {
+            let new_fees = config.total_fees_collected
+                .saturating_sub(staker.last_fees_snapshot);
+            
+            if new_fees > 0 {
+                let share = (new_fees as u128)
+                    .checked_mul(staker.staked_amount as u128)
+                    .ok_or(ShadeError::Overflow)?
+                    .checked_div(config.total_staked as u128)
+                    .ok_or(ShadeError::Overflow)? as u64;
+                
+                if share > 0 {
+                    staker.pending_rewards = staker.pending_rewards
+                        .checked_add(share)
+                        .ok_or(ShadeError::Overflow)?;
+                }
+            }
+            staker.last_fees_snapshot = config.total_fees_collected;
+        }
 
         // Transfer $SHADE from staking vault to user
         let config = &ctx.accounts.protocol_config;
@@ -252,6 +300,7 @@ pub mod shade {
     }
 
     /// Distribute fees to a staker (called by anyone, incentivized)
+    /// Uses snapshot pattern to prevent double-distribution
     pub fn distribute_fees(ctx: Context<DistributeFees>) -> Result<()> {
         let config = &ctx.accounts.protocol_config;
         let staker = &ctx.accounts.staker;
@@ -259,16 +308,18 @@ pub mod shade {
         require!(config.total_staked > 0, ShadeError::NoStakers);
         require!(staker.staked_amount > 0, ShadeError::NotStaking);
 
-        // Calculate share of undistributed fees
-        let undistributed = config.total_fees_collected
-            .saturating_sub(config.total_fees_distributed);
+        // Calculate NEW fees since this staker's last distribution
+        // This prevents double-claiming: each staker can only claim their share of
+        // fees collected AFTER their last distribution call
+        let new_fees = config.total_fees_collected
+            .saturating_sub(staker.last_fees_snapshot);
         
-        if undistributed == 0 {
-            return Ok(());
+        if new_fees == 0 {
+            return Ok(()); // No new fees to distribute to this staker
         }
 
-        // Proportional share based on stake
-        let share = (undistributed as u128)
+        // Proportional share based on stake ratio at time of distribution
+        let share = (new_fees as u128)
             .checked_mul(staker.staked_amount as u128)
             .ok_or(ShadeError::Overflow)?
             .checked_div(config.total_staked as u128)
@@ -278,12 +329,15 @@ pub mod shade {
             return Ok(());
         }
 
-        // Update staker's pending rewards
+        // Update staker's pending rewards and snapshot
         let staker = &mut ctx.accounts.staker;
         staker.pending_rewards = staker
             .pending_rewards
             .checked_add(share)
             .ok_or(ShadeError::Overflow)?;
+        
+        // Record the snapshot - this staker has now claimed their share up to this point
+        staker.last_fees_snapshot = config.total_fees_collected;
 
         emit!(FeesDistributed {
             staker: staker.user,
@@ -639,6 +693,8 @@ pub struct Staker {
     pub pending_rewards: u64,
     /// Last reward claim timestamp
     pub last_claim_timestamp: i64,
+    /// Snapshot of total_fees_collected at last distribution (prevents double-claiming)
+    pub last_fees_snapshot: u64,
     /// Current tier (0=None, 1=Bronze, 2=Silver, 3=Gold)
     pub tier: u8,
     /// PDA bump
@@ -651,6 +707,7 @@ impl Staker {
         8 +  // staked_amount
         8 +  // pending_rewards
         8 +  // last_claim_timestamp
+        8 +  // last_fees_snapshot
         1 +  // tier
         1;   // bump
 }
