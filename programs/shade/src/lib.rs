@@ -852,11 +852,15 @@ pub struct Stake<'info> {
 
     #[account(
         mut,
-        constraint = staking_vault.key() == protocol_config.staking_vault
+        constraint = staking_vault.key() == protocol_config.staking_vault @ ShadeError::InvalidVaultAuthority,
+        constraint = staking_vault.mint == protocol_config.shade_mint @ ShadeError::InvalidMint
     )]
     pub staking_vault: Account<'info, TokenAccount>,
 
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = user_shade_account.mint == protocol_config.shade_mint @ ShadeError::InvalidMint
+    )]
     pub user_shade_account: Account<'info, TokenAccount>,
 
     #[account(mut)]
@@ -885,11 +889,15 @@ pub struct Unstake<'info> {
 
     #[account(
         mut,
-        constraint = staking_vault.key() == protocol_config.staking_vault
+        constraint = staking_vault.key() == protocol_config.staking_vault @ ShadeError::InvalidVaultAuthority,
+        constraint = staking_vault.mint == protocol_config.shade_mint @ ShadeError::InvalidMint
     )]
     pub staking_vault: Account<'info, TokenAccount>,
 
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = user_shade_account.mint == protocol_config.shade_mint @ ShadeError::InvalidMint
+    )]
     pub user_shade_account: Account<'info, TokenAccount>,
 
     pub user: Signer<'info>,
@@ -916,11 +924,15 @@ pub struct ClaimRewards<'info> {
 
     #[account(
         mut,
-        constraint = fee_vault.key() == protocol_config.fee_vault
+        constraint = fee_vault.key() == protocol_config.fee_vault @ ShadeError::InvalidVaultAuthority
     )]
     pub fee_vault: Account<'info, TokenAccount>,
 
-    #[account(mut)]
+    /// User's token account to receive rewards (must match fee vault mint)
+    #[account(
+        mut,
+        constraint = user_token_account.mint == fee_vault.mint @ ShadeError::InvalidMint
+    )]
     pub user_token_account: Account<'info, TokenAccount>,
 
     pub user: Signer<'info>,
@@ -956,9 +968,11 @@ pub struct InitializeFogPool<'info> {
     )]
     pub fog_pool: Account<'info, FogPool>,
 
-    /// CHECK: Vault is validated by token program
+    /// Vault token account - must be owned by the fog_pool PDA
+    /// Note: We validate the vault is a token account; ownership by fog_pool PDA
+    /// is implicitly required for spend operations to work
     #[account(mut)]
-    pub vault: AccountInfo<'info>,
+    pub vault: Account<'info, TokenAccount>,
 
     #[account(mut)]
     pub authority: Signer<'info>,
@@ -974,11 +988,15 @@ pub struct DepositToFog<'info> {
 
     #[account(
         mut,
-        constraint = vault.key() == fog_pool.vault
+        constraint = vault.key() == fog_pool.vault @ ShadeError::InvalidVaultAuthority
     )]
     pub vault: Account<'info, TokenAccount>,
 
-    #[account(mut)]
+    /// Depositor's token account (must match vault mint)
+    #[account(
+        mut,
+        constraint = depositor_token_account.mint == vault.mint @ ShadeError::InvalidMint
+    )]
     pub depositor_token_account: Account<'info, TokenAccount>,
 
     #[account(mut)]
@@ -1055,17 +1073,22 @@ pub struct Spend<'info> {
 
     #[account(
         mut,
-        constraint = vault.key() == fog_pool.vault
+        constraint = vault.key() == fog_pool.vault @ ShadeError::InvalidVaultAuthority
     )]
     pub vault: Account<'info, TokenAccount>,
 
     #[account(
         mut,
-        constraint = fee_vault.key() == protocol_config.fee_vault
+        constraint = fee_vault.key() == protocol_config.fee_vault @ ShadeError::InvalidVaultAuthority,
+        constraint = fee_vault.mint == vault.mint @ ShadeError::InvalidMint
     )]
     pub fee_vault: Account<'info, TokenAccount>,
 
-    #[account(mut)]
+    /// Recipient's token account (must match vault mint for correct token transfer)
+    #[account(
+        mut,
+        constraint = recipient_token_account.mint == vault.mint @ ShadeError::InvalidMint
+    )]
     pub recipient_token_account: Account<'info, TokenAccount>,
 
     pub spender: Signer<'info>,
@@ -1219,4 +1242,8 @@ pub enum ShadeError {
     ExceedsTierLimit,
     #[msg("Invalid tier thresholds (must be ascending)")]
     InvalidTierThresholds,
+    #[msg("Token account has incorrect mint")]
+    InvalidMint,
+    #[msg("Token account has incorrect owner/authority")]
+    InvalidVaultAuthority,
 }
