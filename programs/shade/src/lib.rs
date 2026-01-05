@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer};
 
-declare_id!("3ucYdoYVtvq5dNHqCYWL1WR8kgN4dgDrKnxRK7SN65oN");
+declare_id!("DTW1EWDEsqTi4XvWSRkad138eHQcQxVs7mV9YXivcaox");
 
 /// SHADE Protocol: Authorization-Based Finance
 /// Spend without owning - cryptographic permission to spend from shared liquidity

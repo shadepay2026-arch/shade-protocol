@@ -8,7 +8,7 @@ skip-lint = false
 shade = "3ucYdoYVtvq5dNHqCYWL1WR8kgN4dgDrKnxRK7SN65oN"
 
 [programs.devnet]
-shade = "3ucYdoYVtvq5dNHqCYWL1WR8kgN4dgDrKnxRK7SN65oN"
+shade = "DTW1EWDEsqTi4XvWSRkad138eHQcQxVs7mV9YXivcaox"
 
 [programs.mainnet]
 shade = "3ucYdoYVtvq5dNHqCYWL1WR8kgN4dgDrKnxRK7SN65oN"
@@ -21,4 +21,4 @@ cluster = "Devnet"
 wallet = "D:/Dev/Keys/shade-deployer.json"
 
 [scripts]
-test = "npx ts-mocha -p ./tsconfig.json -t 1000000 tests/tier-threshold-test.ts"
+test = "npx ts-mocha -p ./tsconfig.json -t 1000000 tests/new-threshold-test.ts"
